@@ -50,6 +50,7 @@ router.post("/login" , (req, res ,  next)=>{
     return bcrypt.compare(req.body.password, user.password);
   })
   .then(result =>{
+    if (res.headersSent) return;
     if(!result){
       return res.status(401).json({
         token: "error",
@@ -71,6 +72,7 @@ router.post("/login" , (req, res ,  next)=>{
       });
   })
   .catch(err =>{
+    if (res.headersSent) return;
     return res.status(401).json({
       message: "Auth failed"
     });

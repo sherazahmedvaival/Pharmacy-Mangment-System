@@ -54,7 +54,7 @@ export class AuthService{
         this.token=token;
         const message = response.message;
         const action = 'Close'
-        this.snackBar.open(message , action);
+        this.snackBar.open(message , action, { duration: 3000 });
         if(token){
           const expiresInDuration = response.expiresIn;
           this.userRole = response.role;
@@ -70,6 +70,11 @@ export class AuthService{
           this.router.navigate(['/']);
           // this.headerUserdetailsComponent.onViewUserEmail(email);
         }
+      }, error => {
+        // Replaces the "Logging... Please wait" toast so the UI doesn't appear stuck.
+        const message = (error && error.error && error.error.message) || 'Login failed';
+        this.snackBar.open(message, 'Close', { duration: 4000 });
+        this.authStatusListener.next(false);
       });
   }
 
