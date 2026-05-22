@@ -113,6 +113,92 @@ Star :star:  the repo to help the developers :innocent:
 7) Open your browser and navigate to `http://localhost:4200/`
 
 
+## 🐳 Run with Docker (recommended)
+
+This fork ships a Docker Compose setup that runs the Angular frontend,
+the Node/Express backend, and a MongoDB database in three containers.
+No local Node, npm, or MongoDB install required — just Docker.
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or
+  Docker Engine + Compose v2)
+- Host ports `4200`, `3001`, and `27017` free
+
+### Quick start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/sherazahmedvaival/Pharmacy-Mangment-System.git
+cd Pharmacy-Mangment-System
+
+# 2. Copy the env template (defaults work out-of-the-box)
+cp .env.example .env
+
+# 3. Build and start everything (first build ~3–5 min)
+docker compose up --build -d
+
+# 4. Watch the logs until you see "Compiled successfully."
+docker compose logs -f frontend
+```
+
+When the Angular dev server reports `Compiled successfully.`, open:
+
+| URL                                            | What it is                       |
+| ---------------------------------------------- | -------------------------------- |
+| http://localhost:4200                          | Pharmacy app (Angular frontend)  |
+| http://localhost:3001/api/...                  | Backend REST API                 |
+| mongodb://localhost:27017                      | MongoDB                          |
+
+### Seed the first admin user
+
+The bundled MongoDB starts empty — the project has **no factory-default
+credentials**. Create the first user (a `pharmacist`, which is the
+highest-privilege role) with one curl call:
+
+```bash
+curl -X POST http://localhost:3001/api/user/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Admin",
+    "contact": "0000000000",
+    "nic": "000000000V",
+    "email": "admin@local.test",
+    "password": "admin123",
+    "role": "pharmacist"
+  }'
+```
+
+Then log in at http://localhost:4200 with:
+
+| Field    | Value              |
+| -------- | ------------------ |
+| Email    | `admin@local.test` |
+| Password | `admin123`         |
+
+> Change the password (and rotate the JWT secret in
+> `backend/routes/user.js`) before exposing this anywhere beyond your
+> laptop.
+
+Available roles (per `src/app/sidemenu/menuitem/menuitem.component.ts`):
+`pharmacist`, `cashier`, `assistantPharmacist`.
+
+### Common Docker commands
+
+| Action                                              | Command                                |
+| --------------------------------------------------- | -------------------------------------- |
+| Start (rebuild if changed)                          | `docker compose up --build -d`         |
+| Stop (preserves data)                               | `docker compose stop`                  |
+| Start again                                         | `docker compose start`                 |
+| Restart one service                                 | `docker compose restart backend`       |
+| Remove containers (keeps DB volume)                 | `docker compose down`                  |
+| Remove containers **and** wipe the database         | `docker compose down -v`               |
+| Tail logs                                           | `docker compose logs -f`               |
+| Shell into a container                              | `docker compose exec backend sh`       |
+
+Full guide with troubleshooting: see [DOCKER-DEPLOY.md](DOCKER-DEPLOY.md).
+
+
 ## 🚨 Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
