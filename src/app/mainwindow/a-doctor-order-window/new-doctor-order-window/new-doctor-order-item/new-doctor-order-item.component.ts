@@ -48,7 +48,7 @@ export class NewDoctorOrderItemComponent implements OnInit {
     }
     console.log(user);
 
-    this.emailInteractionService.sendEmail("http://localhost:3000/api/doctorOder/sendmail", user).subscribe(
+    this.emailInteractionService.sendEmail("http://localhost:3001/api/doctorOder/sendmail", user).subscribe(
       data => {
         let res:any = data;
         console.log(

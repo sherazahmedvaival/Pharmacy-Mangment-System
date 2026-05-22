@@ -43,7 +43,7 @@ export class InventoryInteractionService {
 
   getInventory(itemsPerPage: number , currentPage:number) {
     const queryParams = `?pagesize=${itemsPerPage}&page=${currentPage}`;
-    this.http.get<{message: string, inventorys: any}>('http://localhost:3000/api/inventory' + queryParams)
+    this.http.get<{message: string, inventorys: any}>('http://localhost:3001/api/inventory' + queryParams)
     .pipe(map(inventoryData => {
      return inventoryData.inventorys.map(inventory=>{
        return{
@@ -68,7 +68,7 @@ export class InventoryInteractionService {
 
   getOutofStockInventory() {
 
-    this.http.get<{message: string, inventorys: any}>('http://localhost:3000/api/inventory/outofstock' )
+    this.http.get<{message: string, inventorys: any}>('http://localhost:3001/api/inventory/outofstock' )
     .pipe(map(inventoryData => {
      return inventoryData.inventorys.map(inventory=>{
        return{
@@ -92,7 +92,7 @@ export class InventoryInteractionService {
 
   getAboutToOutofStockInventory() {
 
-    this.http.get<{message: string, inventorys: any}>('http://localhost:3000/api/inventory/abouttooutofstock' )
+    this.http.get<{message: string, inventorys: any}>('http://localhost:3001/api/inventory/abouttooutofstock' )
     .pipe(map(inventoryData => {
      return inventoryData.inventorys.map(inventory=>{
        return{
@@ -115,7 +115,7 @@ export class InventoryInteractionService {
 
 
   getExpiredInventory(){
-    this.http.get<{message: string, inventorys: any}>('http://localhost:3000/api/inventory/getExpired')
+    this.http.get<{message: string, inventorys: any}>('http://localhost:3001/api/inventory/getExpired')
     .pipe(map(inventoryData => {
      return inventoryData.inventorys.map(inventory=>{
        return{
@@ -139,7 +139,7 @@ export class InventoryInteractionService {
   getAboutToExpireInventory(){
     let currentDate = new Date();
 
-    this.http.get<{message: string, inventorys: any}>('http://localhost:3000/api/inventory/getAboutToExpire')
+    this.http.get<{message: string, inventorys: any}>('http://localhost:3001/api/inventory/getAboutToExpire')
     .pipe(map(inventoryData => {
      return inventoryData.inventorys.map(inventory=>{
        return{
@@ -164,7 +164,7 @@ export class InventoryInteractionService {
 
 
   // getItemsOfId(id: string){
-  //   this.http.get<{message: string, inventorys: any}>('http://localhost:3000/api/inventory/' + id)
+  //   this.http.get<{message: string, inventorys: any}>('http://localhost:3001/api/inventory/' + id)
   //   .pipe(map(inventoryData => {
   //     return inventoryData.inventorys.map(inventory=>{
   //       return{
@@ -207,7 +207,7 @@ export class InventoryInteractionService {
 
   getInventorys(id: string){
     return this.http.get<{_id: string, email: string  , name: string, quantity: string, batchId: string, expireDate: string, price:string ,imagePath:string}>
-    ('http://localhost:3000/api/inventory/' + id);
+    ('http://localhost:3001/api/inventory/' + id);
   }
 
   addInventory( email: string, name: string, quantity: string, batchId: string, expireDate: string, price: string , image: File) {
@@ -220,7 +220,7 @@ export class InventoryInteractionService {
     inventoryData.append("price", price);
     inventoryData.append("image", image, name);
 
-    this.http.post<{message: string, inventory: Inventory}>('http://localhost:3000/api/inventory',inventoryData)
+    this.http.post<{message: string, inventory: Inventory}>('http://localhost:3001/api/inventory',inventoryData)
     .subscribe((responseData)=>{
       const inventory: Inventory ={id: responseData.inventory.id,
                                    email:email ,
@@ -264,7 +264,7 @@ export class InventoryInteractionService {
                         imagePath: image};
     }
     this.http
-             .put('http://localhost:3000/api/inventory/' + id , inventoryData)
+             .put('http://localhost:3001/api/inventory/' + id , inventoryData)
              .subscribe(response => {
                const updatedInventorys = [...this.inventory];
                const oldInventoryIndex = updatedInventorys.findIndex(i => i.id === id);
@@ -287,7 +287,7 @@ export class InventoryInteractionService {
   updateQuantity(id: string ,quantity: number){
     const inventory   ={id:id ,quantity:quantity };
     this.http
-             .put('http://localhost:3000/api/inventory/updateQuantity/' + id , inventory)
+             .put('http://localhost:3001/api/inventory/updateQuantity/' + id , inventory)
              .subscribe(response => {
                const updatedInventory = [...this.inventor];
                const oldInventoryIndex = updatedInventory.findIndex(s => s.id ===inventory.id);
@@ -298,7 +298,7 @@ export class InventoryInteractionService {
   }
 
   deleteInventory(inventoryId: string) {
-    this.http.delete('http://localhost:3000/api/inventory/' + inventoryId)
+    this.http.delete('http://localhost:3001/api/inventory/' + inventoryId)
       .subscribe(() =>{
         const inventoryUpdated = this.inventory.filter(inventory => inventory.id !== inventoryId);
         this.inventory = inventoryUpdated;

@@ -1,0 +1,16 @@
+FROM node:12.18
+
+WORKDIR /usr/src/app
+
+COPY package.json package-lock.json ./
+RUN npm install --legacy-peer-deps
+
+COPY . .
+
+EXPOSE 4200
+
+# --host 0.0.0.0 makes the dev server reachable from outside the container.
+# --disable-host-check allows the browser to load it via localhost mapping.
+# --poll uses polling for file changes (needed for reliable file watching
+# when source is bind-mounted from macOS/Windows hosts).
+CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--disable-host-check", "--poll", "2000"]

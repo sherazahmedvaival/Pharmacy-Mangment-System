@@ -30,7 +30,7 @@ export class XOutofstockDialogBoxComponent implements OnInit {
     }
     console.log(user);
 
-    this.emailInteractionService.sendEmail("http://localhost:3000/api/inventory/sendmailOutOfStock", user).subscribe(
+    this.emailInteractionService.sendEmail("http://localhost:3001/api/inventory/sendmailOutOfStock", user).subscribe(
       data => {
         let res:any = data;
         console.log(
